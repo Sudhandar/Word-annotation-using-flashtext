@@ -2,9 +2,12 @@ import pandas as pd
 from flashtext import KeywordProcessor
 from sqlalchemy import create_engine
 
+sql_connection="mysql+pymysql://"+os.environ.get("database_username", "")+":"+os.environ.get("password", "")+"@"+os.environ.get("ip", "")+":"+os.environ.get("port", "")+"/"
+
+
 def data_from_db(db_name, query):
     
-    eng = create_engine("mysql+pymysql://database_username:password@ip:port/"+db_name)
+    eng = create_engine(sql_connection+db_name)
     sql_ct = query 
     data = pd.read_sql(sql_ct, eng)
     return data 
