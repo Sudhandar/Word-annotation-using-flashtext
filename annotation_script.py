@@ -32,6 +32,15 @@ def keywords(all_needles, case_flag = False):
 	keyword_processor.add_keywords_from_list(gen_needles)
 	return keyword_processor
 
+def replace_keywords(all_needles,replace_needles,case_flag=False):
+    all_needles = all_needles[['source_id','needle']].drop_duplicates()
+    all_needles['needle'] = all_needles['needle'].str.strip()
+    gen_needles = all_needles['needle'].to_list()
+    keyword_processor = KeywordProcessor(case_sensitive=case_flag)
+    for val1,val2 in zip(gen_needles,replace_needles):
+        keyword_processor.add_keyword(val1,val2)
+    return keyword_processor
+
 def annotation(data,needles, case_flag):
 
 	keyword_processor = keywords(needles, case_flag)
@@ -48,6 +57,10 @@ def annotation(data,needles, case_flag):
 	final = pd.merge(new_data, needles, left_on = 'value', right_on = 'needle', how = 'inner')
 	final = final.drop_duplicates()
 	return final
+
+
+
+
 
 all_needles = pd.read_csv('needles_file.csv')
 abbreviation_needles = pd.read_csv('abbr_needles.csv')
